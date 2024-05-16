@@ -1,9 +1,10 @@
-import Form from "./components/Form";
-import { useReducer } from "react";
 import { activityReducer, initialState } from "./reducers/activity-reducer";
+import { useReducer } from "react";
+import Form from "./components/Form";
+import ActivityList from "./components/ActivityList";
 
 function App() {
-  const [state, dispatch] = useReducer(activityReducer, initialState)
+  const [state, dispatch] = useReducer(activityReducer, initialState);
 
   return (
     <>
@@ -19,6 +20,10 @@ function App() {
         <div className="max-w-4xl mx-auto">
           <Form dispatch={dispatch} />
         </div>
+      </section>
+
+      <section className="p-10 mx-auto max-w-4xl">
+        <ActivityList activities={state.activities} dispatch={dispatch} />
       </section>
     </>
   );
