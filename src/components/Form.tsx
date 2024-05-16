@@ -1,13 +1,32 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { categories } from "../data/categories";
 import type { Activity } from "../types";
+import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
 
-export default function Form() {
-  const [activity, setActivity] = useState<Activity>({
-    category: 1,
-    name: "",
-    calories: 0,
-  });
+type FormProps = {
+  dispatch: Dispatch<ActivityActions>;
+  state: ActivityState;
+};
+
+const initialState: Activity = {
+  id: uuidv4(),
+  category: 1,
+  name: "",
+  calories: 0,
+};
+
+export default function Form({ dispatch, state }: FormProps) {
+  const [activity, setActivity] = useState<Activity>(initialState);
+
+  useEffect(() => {
+    if (state.activeId) {
+      const selectActivity = state.activities.filter(
+        (stateActivity) => stateActivity.id === state.activeId
+      )[0];
+      setActivity(selectActivity);
+    }
+  }, [state.activeId]);
 
   const handleChange = (
     e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
@@ -25,13 +44,21 @@ export default function Form() {
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
+    dispatch({ type: "save-activity", payload: { newActivity: activity } });
 
-  }
+    setActivity({
+      ...initialState,
+      id: uuidv4(),
+    });
+  };
 
   return (
-    <form className="space-y-5 bg-white shadow p-10 rounded-lg" onSubmit={handleSubmit}>
+    <form
+      className="space-y-5 bg-white shadow p-10 rounded-lg"
+      onSubmit={handleSubmit}
+    >
       <div className="grid grid-cols-1 gap-3">
         <label htmlFor="category" className="font-bold">
           Categoría:
