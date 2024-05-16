@@ -32,7 +32,7 @@ export default function ActivityList({
       ) : (
         activities.map((activity) => (
           <div
-            className="px-5 py-10 bg-white mt-5 flex justify-between"
+            className="px-5 py-10 bg-white mt-5 flex justify-between shadow"
             key={activity.id}
           >
             <div className="space-y-2 relative">
