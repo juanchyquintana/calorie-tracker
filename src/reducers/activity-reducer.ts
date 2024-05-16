@@ -18,5 +18,6 @@ export const activityReducer = (
   action: ActivityActions
 ) => {
   if (action.type === "save-activity") {
+    
   }
 };
